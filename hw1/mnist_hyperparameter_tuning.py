@@ -35,31 +35,32 @@ def list_matrix_to_list_vector(list_matrix):
         # print("matrix: ", matrix[0])
         list_vector.append(matrix_to_vector_form(matrix[0]))
     return list_vector
-    
-#MNIST part a
-training_num = [100, 200, 500, 1000, 2000, 5000, 10000]
-score = []
 x_valid, y_valid = data_partitioning.create_validation_mnist_set()
 x_valid = list_matrix_to_list_vector(x_valid)
 x_train_set, y_train_set = data_partitioning.create_validation_mnist_set(size_set=10000)
-for i in training_num:
+moving_avg = 0
+moving_
+def train_data(c=0.1):
+    #MNIST part a
+    score = []
+    global x_valid, y_valid, x_train_set, y_train_set
+
     mnist_data = data_lib["mnist"]
     
-    x_train = x_train_set[0:i]
+    x_train = x_train_set[0:10000]
     # x_train, y_train = data_partitioning.create_validation_mnist_set(size_set=i)
     
     x_train = list_matrix_to_list_vector(x_train)
     
     
-    y_train = y_train_set[0:i]
+    y_train = y_train_set[0:10000]
     
-    training_model = svm.SVC(kernel= 'linear', random_state=1)
+    training_model = svm.SVC(kernel= 'linear', random_state=1, c=c)
     training_model.fit(x_train, y_train)
     
     y_pred = training_model.predict(x_valid)
     score.append(accuracy_score(y_valid, y_pred))
-plt.plot(training_num, score)
-plt.show()
+    
 
 
 
