@@ -39,16 +39,23 @@ def list_matrix_to_list_vector(list_matrix):
 #MNIST part a
 training_num = [100, 200, 500, 1000, 2000, 5000, 10000]
 score = []
-x_valid, y_valid = data_partitioning.create_validation_mnist_set()
+x_valid, y_valid = data_partitioning.create_validation_mnist_set(size_set=20000)
 x_valid = list_matrix_to_list_vector(x_valid)
-x_train_set, y_train_set = data_partitioning.create_validation_mnist_set(size_set=10000)
+x_train_set = x_valid[0:10000]
+y_train_set = y_valid[0:10000]
+x_valid = x_valid[10000:]
+y_valid = y_valid[10000:]
+
+x_train = x_train_set
+# x_train = list_matrix_to_list_vector(x_train)
+y_train = y_train_set
 for i in training_num:
     mnist_data = data_lib["mnist"]
     
     x_train = x_train_set[0:i]
     # x_train, y_train = data_partitioning.create_validation_mnist_set(size_set=i)
     
-    x_train = list_matrix_to_list_vector(x_train)
+    # x_train = list_matrix_to_list_vector(x_train)
     
     
     y_train = y_train_set[0:i]
