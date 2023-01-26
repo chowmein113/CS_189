@@ -38,12 +38,18 @@ def list_matrix_to_list_vector(list_matrix):
     
 #spam part b
 training_num = [100, 200, 500, 1000, 2000, 4172]
+training_num = [2000, 4172]
 score = []
-x_valid, y_valid = data_partitioning.create_validation_spam_set()
+# x_valid, y_valid = data_partitioning.create_validation_spam_set()
 x_train_set, y_train_set = data_partitioning.create_validation_spam_set(size_set=4172)
+divider = 4172 // 5
+x_valid = x_train_set[:divider]
+y_valid = y_train_set[:divider]
+x_train_set = x_train_set[divider:]
+y_train_set = y_train_set[divider:]
 # print("x_valid: ", x_valid)
 # x_valid = list_matrix_to_list_vector(x_valid)
-for i in training_num:
+for i in tqdm(training_num):
     
     
     x_train = x_train_set[0:i]
@@ -53,7 +59,7 @@ for i in training_num:
     
     
     y_train = y_train_set[0:i]
-    training_model = svm.SVC(kernel= 'linear', random_state=1)
+    training_model = svm.SVC(kernel= 'rbf', random_state=1, C=2**11)
     training_model.fit(x_train, y_train)
     
     y_pred = training_model.predict(x_valid)

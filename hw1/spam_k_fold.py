@@ -53,17 +53,17 @@ for i in range(k + 1):
     x_train_subsets.append(x_train_set[start:end])
     y_train_subsets.append(y_train_set[start:end])
 avg_scores = []
-values = range(-5, 5)
-for c in values:
-    for i in range(len(x_train_subsets)):
+values = range(8, 13)
+for c in tqdm(values, "going through c values"):
+    for i in tqdm(range(len(x_train_subsets)), "testing different subsets..."):
 
 
         valid_x_set = x_train_subsets[i]
         valid_y_set = y_train_subsets[i]
-        training_model = svm.SVC(kernel= 'linear', random_state=1, C= 2**c)
+        training_model = svm.SVC(kernel= 'rbf', random_state=1, C= 2**c)
         training_set_x = []
         training_set_y = []
-        for r in range(len(x_train_subsets)):
+        for r in (range(len(x_train_subsets))):
             if r != i:
                 training_set_x.extend(x_train_subsets[r])
                 training_set_y.extend(y_train_subsets[r])

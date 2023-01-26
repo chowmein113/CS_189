@@ -37,7 +37,7 @@ def list_matrix_to_list_vector(list_matrix):
     return list_vector
     
 #cfar part c
-c_val = list(range(-5, -3))
+c_val = [2**(-3), 5000, 40]
 score = []
 
 x_train_set, y_train_set = data_partitioning.create_validation_cfar_set(size_set=50000)
@@ -49,6 +49,7 @@ y_train_set = y_train_set[10000:]
 # x_valid = list_matrix_to_list_vector(x_valid)
 test_data = data_lib["cifar10"]["test_data"]
 y_test_label = []
+prev_score = 0
 for i in tqdm(c_val, "training: "):
     
     
@@ -60,20 +61,22 @@ for i in tqdm(c_val, "training: "):
     
     
     y_train = y_train_set
-    training_model = svm.SVC(kernel= 'rbf', random_state=1, C=2**i)
+    training_model = svm.SVC(kernel= 'poly', random_state=1, C=i)
     training_model.fit(x_train, y_train)
     
     y_pred = training_model.predict(x_valid)
-    score.append(accuracy_score(y_valid, y_pred))
-    # y_test_label = training_model.predict(test_data)
+    curr_score = accuracy_score(y_valid, y_pred)
+    score.append(curr_score)
+    if curr_score > prev_score:
+        y_test_label = training_model.predict(test_data)
     
 plt.plot(c_val, score)
 plt.show()
-# import pandas as pd
-# file_name = "kaggle_cifar.csv"
-# data_frame = pd.DataFrame([list(range(1, len(test_data) + 1)), y_test_label])
-# data_frame = data_frame.transpose()
-# data_frame.to_csv("results/"+file_name, index=False, header=None)
+import pandas as pd
+file_name = "kaggle_cifar.csv"
+data_frame = pd.DataFrame([list(range(1, len(test_data) + 1)), y_test_label])
+data_frame = data_frame.transpose()
+data_frame.to_csv("results/"+file_name, index=False, header=None)
 
 
 
